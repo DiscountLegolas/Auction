@@ -1,0 +1,32 @@
+﻿@model EnteringAuction
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    @{
+        using (Html.BeginForm())
+        {
+            <h1>Enter Invıte Id:</h1>
+            @Html.TextBoxFor(x => x.Invite, new { @class = "auction-invite" });
+            <br />
+            <h1>If You Have a Moderator Id Enter Here:</h1>
+            @Html.TextBoxFor(x => x.ModId, new { @class = "auction-invite" })
+            <br />
+            <h1>Enter Name:</h1>
+            @Html.TextBoxFor(x => x.Name, new { @class = "auction-invite" })
+            <br />
+            <button type="submit">Enter Auction</button>
+        }
+    }
+    <p id="result"></p>
+</div>
+<style>
+    .auction-invite{
+        border:dotted;
+        border-radius:10px;
+    }
+    .auction-invite:focus{
+        outline:none;
+    }
+</style>
