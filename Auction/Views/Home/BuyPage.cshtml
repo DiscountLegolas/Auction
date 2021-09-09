@@ -2,9 +2,19 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    var a = (List<BuyedItem>)ViewBag.A;
-    foreach (var item in a)
+    var buyedıtems = (List<BuyedItem>)ViewBag.A;
+    foreach (var item in buyedıtems)
     {
-        <p>@item.Id</p>
+        <h3>Name:</h3>
+        <h4>@item.Name</h4>
+        <h3>Price:</h3>
+        <h4>@item.Price</h4>
     }
+    int totalprice = 0;
+    buyedıtems.ForEach(x =>
+    {
+        totalprice = totalprice + x.Price;
+    });
+    <h1>Total Price:</h1>
+    <h2>@totalprice</h2>
 }

@@ -23,8 +23,9 @@ connection.on("ReceiveCurrentAuctionValue", function (value, name, connectıd) {
         buton.className = "";
     }
 });
-function BuyedItem(id, price) {
+function BuyedItem(id,name, price) {
     this.id = id;
+    this.name = name;
     this.price = price;
 }
 connection.on("ReceiveSatış", function () {
@@ -79,7 +80,7 @@ function BeginSatış() {
         if (timeleft <= 0) {
             clearInterval(timer);
             if (lastbidderconnectionid == connectionıd) {
-                var buyedıtem = new BuyedItem(Number(currentıtemıd.innerText), a);
+                var buyedıtem = new BuyedItem(Number(currentıtemıd.innerText), ürün.innerText, a);
                 buyedıtems.push(buyedıtem);
             }
             sayım.innerHTML = "<b>Sattım</b>";
