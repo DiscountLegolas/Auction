@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Auction.Controllers
 {
@@ -67,12 +68,27 @@ namespace Auction.Controllers
             var items = new List<Item>();
             foreach (var item in _ıtems)
             {
-                items.Add(new Item() { Name = item.Name, AçılışFiyatı = item.StartingPrice });
+                items.Add(new Item() {Id=item.ItemId, Name = item.Name, AçılışFiyatı = item.StartingPrice });
             }
             auction.Items = items;
             return View(auction);
         }
-
+        [Route("BuyPage/{a}")]
+        public IActionResult BuyPage(string a)
+        {
+            a = Regex.Replace(a, @"[^\u0000-\u007F]+", string.Empty);
+            var buyedıtems = JsonConvert.DeserializeObject<List<BuyedItem>>(a);
+            for (int i = 0; i < buyedıtems.Count; i++)
+            {
+                var item = buyedıtems[i];
+                if (buyedıtems.Count(x=>x.Id==item.Id)>1)
+                {
+                    buyedıtems.Remove(item);
+                }
+            }
+            ViewBag.A = buyedıtems;
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

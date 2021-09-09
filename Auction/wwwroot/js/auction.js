@@ -1,12 +1,16 @@
 ﻿"use strict";
 
+var buyedıtems = new Array();
 var lastbidderconnectionid = "";
 var lastbidder = "";
 var auctionid = window.location.href.replace("https://localhost:44336/Auction/", "");
 var buton = document.getElementById("SatışıBaşlat");
+var ürün = document.getElementById("Ürün");
 var input = document.getElementById("CurrentMiktar");
 var sayım = document.getElementById("countdown");
 var currentmiktar = document.getElementById("currentmiktar");
+var nextbutton = document.getElementById("NextButton");
+var currentıtemıd = document.getElementById("ıtemıd");
 var connection = new signalR.HubConnectionBuilder().withUrl("/auctionhub").build();
 connection.on("ReceiveCurrentAuctionValue", function (value, name, connectıd) {
     lastbidderconnectionid = connectıd;
@@ -16,18 +20,27 @@ connection.on("ReceiveCurrentAuctionValue", function (value, name, connectıd) {
     lastbidder = name.toString();
     document.getElementById("from").innerHTML = "<b> from " + name.toString() + "</b>";
     buton.innerText = Number(value).toString() + " Fiyatından Satışı Aç";
+});
+function BuyedItem(id, price) {
+    this.id = id;
+    this.price = price;
+}
+connection.on("ReceiveSatış", function () {
     BeginSatış();
 });
 connection.on("ReceiveNextObj", function (number) {
     var obj = model.Items[Number(number)];
+    currentıtemıd.innerText = obj.Id;
     input.value = obj.AçılışFiyatı;
     input.min = obj.AçılışFiyatı;
     currentmiktar.innerText = obj.AçılışFiyatı;
-    document.getElementById("Ürün").innerText = obj.Name;
+    input.disabled = false;
+    sayım.innerHTML = "";
+    ürün.innerText = obj.Name;
 });
 buton.onclick = function () {
     BeginSatış();
-    connection.invoke("SendCurrentAuctionValue", currentmiktar.innerText, auctionid).catch(function (err) {
+    connection.invoke("BeginSatış", auctionid).catch(function (err) {
         return console.error(err.toString());
     });
 }
@@ -43,7 +56,6 @@ input.addEventListener("keyup", function (event) {
         currentmiktar.innerHTML = "<b>" + Number(input.value).toString() + "</b>";
         buton.innerText = Number(input.value).toString() + " Fiyatından Satışı Aç";
         input.min = input.value;
-        BeginSatış();
         connection.invoke("SendCurrentAuctionValue", currentmiktar.innerText, auctionid, model.Name, connectionıd).catch(function (err) {
             return console.error(err.toString());
         });
@@ -61,9 +73,18 @@ function BeginSatış() {
         if (timeleft <= 0) {
             clearInterval(timer);
             if (lastbidderconnectionid == connectionıd) {
-                window.location.href = "https://localhost:44336/";
+                var buyedıtem = new BuyedItem(Number(currentıtemıd.innerText), a);
+                buyedıtems.push(buyedıtem);
             }
             sayım.innerHTML = "<b>Sattım</b>";
+            input.disabled = true;
+            if (model.IsModerator && document.getElementById("Ürün").innerText != lastıtem.Name) {
+                nextbutton.className = "";
+            }
+            if (document.getElementById("Ürün").innerText == lastıtem.Name && model.IsModerator == false) {
+                window.location.href = "https://localhost:44336/BuyPage/" + JSON.stringify(buyedıtems);
+            }
+            
         } else {
             if (timeleft == 4) {
                 sayım.innerHTML = a.toString() + " e Satıyorum";

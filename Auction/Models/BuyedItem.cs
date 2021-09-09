@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace Auction.Models
 {
-    public class Item
+    public class BuyedItem
     {
+        public int Price { get; set; }
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int AçılışFiyatı { get; set; }
     }
 }

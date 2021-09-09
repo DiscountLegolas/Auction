@@ -1,6 +1,7 @@
 ﻿@model Auction
 @{
     var item = Model.Items.First();
+    <p id="ıtemıd" hidden>@item.Id</p>
     <h1>Ürün:</h1>
     <h2 id="Ürün">@item.Name</h2>
     string classname = "buttondontshow";
@@ -19,22 +20,23 @@
     <button id="SatışıBaşlat" class="@classname">Başlangıç Fiyatından Satışı Aç</button>
     <br />
     <br />
-    <button onclick="NextItem()" class="@classname">Next Item</button>
+    <button onclick="NextItem()" id="NextButton" class="buttondontshow">Next Item</button>
     <p id="countdown"></p>
 }
 <script type="text/javascript">
     var num = 0;
-    var input = document.getElementById("CurrentMiktar");
-    var currentmiktar = document.getElementById("currentmiktar");
     var connectionıd ="@Html.Raw(Context.Connection.Id)";
     var model = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    var lastıtem = model.Items[model.Items.length-1];
     function NextItem() {
         num = num + 1;
         var obj = model.Items[num];
+        currentıtemıd.innerText = obj.Id;
         input.value = obj.AçılışFiyatı;
         input.min = obj.AçılışFiyatı;
         currentmiktar.innerText = obj.AçılışFiyatı;
-        document.getElementById("Ürün").innerText = obj.Name;
+        ürün.innerText = obj.Name;
+        nextbutton.className = "buttondontshow";
         connection.invoke("NextObj", auctionid, num.toString()).catch(function (err) {
             currentmiktar.innerText = err.toString();
         });

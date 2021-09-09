@@ -8,9 +8,13 @@ namespace Auction
 {
     public class Auctionhub:Hub
     {
+        public Task BeginSatış(string groupname)
+        {
+            return Clients.GroupExcept(groupname, Context.ConnectionId).SendAsync("ReceiveSatış");
+        }
         public Task SendCurrentAuctionValue(string value,string groupname,string name,string connectionıd)
         {
-            return Clients.Group(groupname).SendAsync("ReceiveCurrentAuctionValue", value,name,connectionıd);
+            return Clients.GroupExcept(groupname,Context.ConnectionId).SendAsync("ReceiveCurrentAuctionValue", value,name,connectionıd);
         }
         public Task JoinGroup(string groupname)
         {
