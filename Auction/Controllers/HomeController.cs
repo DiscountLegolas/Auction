@@ -30,7 +30,7 @@ namespace Auction.Controllers
         [HttpPost]
         public IActionResult Index(EnteringAuction entering)
         {
-            if (_context.Auctions.Any(x=>x.Invite==entering.Invite&&x.Open==true)&&entering.Name.Length>2)
+            if (_context.Auctions.Any(x=>x.Invite==entering.Invite&&x.Open==true)&&entering.Name!=null&&entering.Name.Length>2)
             {
                 var auction = _context.Auctions.Single(x => x.Invite == entering.Invite);
                 TempData["Name"] = entering.Name;

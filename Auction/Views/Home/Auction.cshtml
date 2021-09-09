@@ -4,20 +4,22 @@
     <p id="ıtemıd" hidden>@item.Id</p>
     <h1>Ürün:</h1>
     <h2 id="Ürün">@item.Name</h2>
+    <h3>Açılış Fiyatı:</h3>
+    <h4 id="açılışfiyatı">@item.AçılışFiyatı</h4>
     string classname = "buttondontshow";
     if (!Model.IsModerator)
     {
         classname = "";
     }
     <input id="CurrentMiktar" type="number" min="@item.AçılışFiyatı" value="@item.AçılışFiyatı" class="@classname" />
-    <h3>Şu Anki Teklif:</h3>
-    <h4 id="currentmiktar">@item.AçılışFiyatı</h4><p id="from"></p>
+    <h5>Şu Anki Teklif:</h5>
+    <p id="currentmiktar"></p><p id="from"></p>
     classname = "buttondontshow";
     if (Model.IsModerator)
     {
         classname = "";
     }
-    <button id="SatışıBaşlat" class="@classname">Başlangıç Fiyatından Satışı Aç</button>
+    <button id="SatışıBaşlat" class="buttondontshow"></button>
     <br />
     <br />
     <button onclick="NextItem()" id="NextButton" class="buttondontshow">Next Item</button>
@@ -31,11 +33,15 @@
     function NextItem() {
         num = num + 1;
         var obj = model.Items[num];
+        buton.className = "buttondontshow";
         currentıtemıd.innerText = obj.Id;
+        currentmiktar.innerText = "";
         input.value = obj.AçılışFiyatı;
         input.min = obj.AçılışFiyatı;
-        currentmiktar.innerText = obj.AçılışFiyatı;
+        açılışfiyatı.innerText = obj.AçılışFiyatı;
+        sayım.innerText = "";
         ürün.innerText = obj.Name;
+        document.getElementById("from").innerText = "";
         nextbutton.className = "buttondontshow";
         connection.invoke("NextObj", auctionid, num.toString()).catch(function (err) {
             currentmiktar.innerText = err.toString();

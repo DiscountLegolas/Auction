@@ -2,8 +2,8 @@
 
 var buyedıtems = new Array();
 var lastbidderconnectionid = "";
-var lastbidder = "";
 var auctionid = window.location.href.replace("https://localhost:44336/Auction/", "");
+var açılışfiyatı = document.getElementById("açılışfiyatı");
 var buton = document.getElementById("SatışıBaşlat");
 var ürün = document.getElementById("Ürün");
 var input = document.getElementById("CurrentMiktar");
@@ -17,9 +17,11 @@ connection.on("ReceiveCurrentAuctionValue", function (value, name, connectıd) {
     input.min = value;
     input.value = value;
     currentmiktar.innerHTML = "<b>" + Number(value).toString() + "</b>";
-    lastbidder = name.toString();
     document.getElementById("from").innerHTML = "<b> from " + name.toString() + "</b>";
     buton.innerText = Number(value).toString() + " Fiyatından Satışı Aç";
+    if (model.IsModerator) {
+        buton.className = "";
+    }
 });
 function BuyedItem(id, price) {
     this.id = id;
@@ -30,10 +32,12 @@ connection.on("ReceiveSatış", function () {
 });
 connection.on("ReceiveNextObj", function (number) {
     var obj = model.Items[Number(number)];
+    açılışfiyatı.innerText=obj.AçılışFiyatı
     currentıtemıd.innerText = obj.Id;
+    document.getElementById("from").innerText = "";
+    currentmiktar.innerText = "";
     input.value = obj.AçılışFiyatı;
     input.min = obj.AçılışFiyatı;
-    currentmiktar.innerText = obj.AçılışFiyatı;
     input.disabled = false;
     sayım.innerHTML = "";
     ürün.innerText = obj.Name;
@@ -53,6 +57,8 @@ connection.start().then(function () {
 });
 input.addEventListener("keyup", function (event) {
     if (event.keyCode == 13) {
+        lastbidderconnectionid = connectionıd;
+        document.getElementById("from").innerHTML = "<b> from " + model.Name + "</b>";
         currentmiktar.innerHTML = "<b>" + Number(input.value).toString() + "</b>";
         buton.innerText = Number(input.value).toString() + " Fiyatından Satışı Aç";
         input.min = input.value;
