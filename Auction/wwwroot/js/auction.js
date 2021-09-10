@@ -12,6 +12,20 @@ var currentmiktar = document.getElementById("currentmiktar");
 var nextbutton = document.getElementById("NextButton");
 var currentıtemıd = document.getElementById("ıtemıd");
 var connection = new signalR.HubConnectionBuilder().withUrl("/auctionhub").build();
+connection.on("Givelastplace", function () {
+    if (model.IsModerator) {
+        connection.invoke("GiveObj", auctionid, num.toString()).catch(function (err) {
+            currentmiktar.innerText = err.toString();
+        });
+        var teklif = document.getElementById("from").innerText.replace("from", "");
+        if (Number(teklif) == 0) {
+            teklif = Number(obj.AçılışFiyatı).toString();
+        }
+        connection.invoke("SendCurrentAuctionValue", currentmiktar.innerText, auctionid, teklif, lastbidderconnectionid).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+});
 connection.on("ReceiveCurrentAuctionValue", function (value, name, connectıd) {
     lastbidderconnectionid = connectıd;
     input.min = value;
@@ -31,7 +45,7 @@ function BuyedItem(id,name, price) {
 connection.on("ReceiveSatış", function () {
     BeginSatış();
 });
-connection.on("ReceiveNextObj", function (number) {
+connection.on("ReceiveObj", function (number) {
     var obj = model.Items[Number(number)];
     açılışfiyatı.innerText=obj.AçılışFiyatı
     currentıtemıd.innerText = obj.Id;
@@ -89,6 +103,10 @@ function BeginSatış() {
                 nextbutton.className = "";
             }
             if (document.getElementById("Ürün").innerText == lastıtem.Name && model.IsModerator == false) {
+                var xhttp = new XMLHttpRequest();
+                var url = "https://localhost:44336/CloseAuction/" + auctionid;
+                xhttp.open("GET", url, false);
+                xhttp.send(null);
                 window.location.href = "https://localhost:44336/BuyPage/" + JSON.stringify(buyedıtems);
             }
             

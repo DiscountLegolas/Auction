@@ -33,6 +33,7 @@ namespace Auction.Controllers
             if (_context.Auctions.Any(x=>x.Invite==entering.Invite&&x.Open==true)&&entering.Name!=null&&entering.Name.Length>2)
             {
                 var auction = _context.Auctions.Single(x => x.Invite == entering.Invite);
+                _context.Dispose();
                 TempData["Name"] = entering.Name;
                 if (entering.ModId== auction.ModeratorId)
                 {
@@ -63,12 +64,12 @@ namespace Auction.Controllers
                 
             }
             string name = (string)TempData["Name"];
-            var _ıtems = _context.Auctions.Include(x => x.Items).Single(x => x.Invite == invite && x.Open == true).Items;
+            var _items = _context.Auctions.Include(x => x.Items).Single(x => x.Invite == invite && x.Open == true).Items;
             var auction = new Auction.Models.Auction() { Invite = invite,IsModerator=ismod,Name=name };
             var items = new List<Item>();
-            foreach (var item in _ıtems)
+            foreach (var item in _items)
             {
-                items.Add(new Item() {Id=item.ItemId, Name = item.Name, AçılışFiyatı = item.StartingPrice });
+                items.Add(new Item() { Id = item.ItemId, Name = item.Name, AçılışFiyatı = item.StartingPrice });
             }
             auction.Items = items;
             return View(auction);
@@ -89,9 +90,14 @@ namespace Auction.Controllers
             ViewBag.A = buyedıtems;
             return View();
         }
-        public IActionResult Privacy()
+        [Route("CloseAuction/{invite}")]
+        public IActionResult CloseAuction(string invite)
         {
-            return View();
+            var auction = _context.Auctions.Single(x => x.Invite == invite);
+            auction.Open = false;
+            _context.SaveChanges();
+            _context.Dispose();
+            return Ok();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

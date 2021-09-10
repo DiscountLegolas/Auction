@@ -18,11 +18,12 @@ namespace Auction
         }
         public Task JoinGroup(string groupname)
         {
-            return Groups.AddToGroupAsync(Context.ConnectionId,groupname);
+            Groups.AddToGroupAsync(Context.ConnectionId, groupname);
+            return Clients.GroupExcept(groupname, Context.ConnectionId).SendAsync("Givelastplace");
         }
-        public Task NextObj(string groupname,string number)
+        public Task GiveObj(string groupname,string number)
         {
-            return Clients.GroupExcept(groupname,Context.ConnectionId).SendAsync("ReceiveNextObj", number);
+            return Clients.GroupExcept(groupname,Context.ConnectionId).SendAsync("ReceiveObj", number);
         }
     }
 }

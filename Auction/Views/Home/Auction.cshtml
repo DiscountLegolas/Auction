@@ -43,7 +43,7 @@
         ürün.innerText = obj.Name;
         document.getElementById("from").innerText = "";
         nextbutton.className = "buttondontshow";
-        connection.invoke("NextObj", auctionid, num.toString()).catch(function (err) {
+        connection.invoke("GiveObj", auctionid, num.toString()).catch(function (err) {
             currentmiktar.innerText = err.toString();
         });
     }
