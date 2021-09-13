@@ -1,5 +1,6 @@
 ﻿"use strict";
 
+
 var buyedıtems = new Array();
 var lastbidderconnectionid = "";
 var auctionid = window.location.href.replace("https://localhost:44336/Auction/", "");
@@ -72,14 +73,28 @@ connection.start().then(function () {
 });
 input.addEventListener("keyup", function (event) {
     if (event.keyCode == 13) {
+        event.preventDefault();
         lastbidderconnectionid = connectionıd;
-        document.getElementById("from").innerHTML = "<b> from " + model.Name + "</b>";
         currentmiktar.innerHTML = "<b>" + Number(input.value).toString() + "</b>";
+        document.getElementById("from").innerHTML = "<b> from " + model.Name + "</b>";
         buton.innerText = Number(input.value).toString() + " Fiyatından Satışı Aç";
         input.min = input.value;
         connection.invoke("SendCurrentAuctionValue", currentmiktar.innerText, auctionid, model.Name, connectionıd).catch(function (err) {
             return console.error(err.toString());
         });
+        var synt = window.speechSynthesis;
+        const voicearray = window.speechSynthesis.getVoices();
+        var line = "deneme";
+        var utterence = new SpeechSynthesisUtterance(line);
+        utterence.pitch = 1;
+        utterence.volume = 1;
+        for (var i = 0; i < voicearray.length; i++) {
+            if (voicearray[i].name === "Microsoft Tolga - Turkish (Turkey)") {
+                utterence.voice = voicearray[i];
+                break;
+            }
+        }
+        synt.speak(utterence);
     }
 });
 function BeginSatış() {

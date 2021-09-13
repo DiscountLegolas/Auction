@@ -27,10 +27,16 @@ namespace Auction.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult Index(EnteringAuction entering)
+        [Route("EnterAuction")]
+        public IActionResult EnterAuction()
         {
-            if (_context.Auctions.Any(x=>x.Invite==entering.Invite&&x.Open==true)&&entering.Name!=null&&entering.Name.Length>2)
+            return View();
+        }
+        [Route("EnterAuction")]
+        [HttpPost]
+        public IActionResult EnterAuction(EnteringAuction entering)
+        {
+            if (_context.Auctions.Any(x=>x.Invite==entering.Invite&&x.Open==true)&&ModelState.IsValid)
             {
                 var auction = _context.Auctions.Single(x => x.Invite == entering.Invite);
                 _context.Dispose();
@@ -47,6 +53,19 @@ namespace Auction.Controllers
             }
             else
             {
+                if (_context.Auctions.Any(x => x.Invite == entering.Invite)==false)
+                {
+                    ModelState.Values.ToList().ForEach(x => x.Errors.Clear());
+                    ModelState.AddModelError("ınv", "Auction Can't Be Found");
+                }
+                else
+                {
+                    if (_context.Auctions.Single(x => x.Invite == entering.Invite).Open==false)
+                    {
+                        ModelState.Values.ToList().ForEach(x => x.Errors.Clear());
+                        ModelState.AddModelError("ınv", "Auction Is Closed");
+                    }
+                }
                 ViewBag.Alert = "Alert";
                 return View();
             }

@@ -1,4 +1,7 @@
 ﻿@model Auction
+@{ 
+    ViewData["Title"] = "Auction - " + Model.Invite;
+}
 @{
     var item = Model.Items.First();
     <p id="ıtemıd" hidden>@item.Id</p>
@@ -6,6 +9,7 @@
     <h2 id="Ürün">@item.Name</h2>
     <h3>Açılış Fiyatı:</h3>
     <h4 id="açılışfiyatı">@item.AçılışFiyatı</h4>
+    <p id="a" hidden></p>
     string classname = "buttondontshow";
     if (!Model.IsModerator)
     {
@@ -26,6 +30,9 @@
     <p id="countdown"></p>
 }
 <script type="text/javascript">
+    window.speechSynthesis.onvoiceschanged = function () {
+        const voices = window.speechSynthesis.getVoices();
+    }
     var num = 0;
     var connectionıd ="@Html.Raw(Context.Connection.Id)";
     var model = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));

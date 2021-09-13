@@ -1,32 +1,33 @@
-﻿@model EnteringAuction
-@{
-    ViewData["Title"] = "Home Page";
+﻿@{
+    ViewData["Title"] = "Home";
 }
+<select id="voicelist">
 
-<div>
-    @{
-        using (Html.BeginForm())
-        {
-            <h1>Enter Invıte Id:</h1>
-            @Html.TextBoxFor(x => x.Invite, new { @class = "auction-invite" });
-            <br />
-            <h1>If You Have a Moderator Id Enter Here:</h1>
-            @Html.TextBoxFor(x => x.ModId, new { @class = "auction-invite" })
-            <br />
-            <h1>Enter Name:</h1>
-            @Html.TextBoxFor(x => x.Name, new { @class = "auction-invite" })
-            <br />
-            <button type="submit">Enter Auction</button>
+</select>
+<button onclick="konuş()"></button>
+<script type="text/javascript">
+    window.speechSynthesis.onvoiceschanged = function () {
+        const voicearray= window.speechSynthesis.getVoices();
+        var voicelist = document.getElementById("voicelist");
+        for (var i = 0; i < voicearray.length; i++) {
+            var option = document.createElement("option");
+            option.textContent = voicearray[i].name
+            voicelist.appendChild(option);
         }
     }
-    <p id="result"></p>
-</div>
-<style>
-    .auction-invite{
-        border:dotted;
-        border-radius:10px;
+    function konuş() {
+        var syny = window.speechSynthesis;
+        var a = "Deneme";
+        var voices = window.speechSynthesis.getVoices();
+        var utt = new SpeechSynthesisUtterance(a);
+        utt.pitch = 1;
+        utt.volume = 1;
+        for (var i = 0; i < voices.length; i++) {
+            if (voices[i].name === "Microsoft Tolga - Turkish (Turkey)") {
+                utt.voice = voices[i];
+                break;
+            }
+        }
+        syny.speak(utt);
     }
-    .auction-invite:focus{
-        outline:none;
-    }
-</style>
+</script>
