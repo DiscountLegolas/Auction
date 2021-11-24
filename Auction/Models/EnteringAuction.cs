@@ -10,7 +10,8 @@ namespace Auction.Models
     {
         public string Invite { get; set; }
         public string ModId { get; set; }
-        [StringLength(10,ErrorMessage ="Name Must Be Longer than 2 Characters And Shorter Than 10 Characters",MinimumLength =2)]
+        [StringLength(10,ErrorMessage ="Name Must Be Longer than 2 Characters And Shorter Than 10 Characters",MinimumLength =3)]
+        [Required]
         public string Name { get; set; }
     }
 }

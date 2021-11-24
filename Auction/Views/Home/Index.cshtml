@@ -1,33 +1,21 @@
 ﻿@{
     ViewData["Title"] = "Home";
 }
-<select id="voicelist">
-
-</select>
-<button onclick="konuş()"></button>
-<script type="text/javascript">
-    window.speechSynthesis.onvoiceschanged = function () {
-        const voicearray= window.speechSynthesis.getVoices();
-        var voicelist = document.getElementById("voicelist");
-        for (var i = 0; i < voicearray.length; i++) {
-            var option = document.createElement("option");
-            option.textContent = voicearray[i].name
-            voicelist.appendChild(option);
-        }
-    }
-    function konuş() {
-        var syny = window.speechSynthesis;
-        var a = "Deneme";
-        var voices = window.speechSynthesis.getVoices();
-        var utt = new SpeechSynthesisUtterance(a);
-        utt.pitch = 1;
-        utt.volume = 1;
-        for (var i = 0; i < voices.length; i++) {
-            if (voices[i].name === "Microsoft Tolga - Turkish (Turkey)") {
-                utt.voice = voices[i];
-                break;
-            }
-        }
-        syny.speak(utt);
-    }
-</script>
+<div class="outer">
+    <div class="explonation">
+        
+    </div>
+    <img src="~/Resources/kisspng-online-auction-computer-icons-gavel-bidding-free-auction-svg-5ab0fc62e828e9.svg"  class="icon"/>
+</div>
+<style>
+.outer { display: flex; justify-content: center; background-image: url("C:\Users\prof1\source\repos\Auction\Auction\wwwroot\Resources\judges-auctioneer-gavel-computer-keyboard-260nw-441608332.svg") }
+.explonation { 
+    width: 100%; 
+    height: 150px;          
+    background-image: url("") 
+}
+.icon{
+    width:20%;
+    height:auto;
+}
+</style>

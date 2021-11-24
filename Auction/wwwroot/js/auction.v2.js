@@ -37,6 +37,19 @@ connection.on("ReceiveCurrentAuctionValue", function (value, name, connectıd) {
     if (model.IsModerator) {
         buton.className = "";
     }
+    var synt = window.speechSynthesis;
+    const voicearray = window.speechSynthesis.getVoices();
+    var line = name.toString() + "'den" + Number(value).toString() + "Tl";
+    var utterence = new SpeechSynthesisUtterance(line);
+    utterence.pitch = 1;
+    utterence.volume = 1;
+    for (var i = 0; i < voicearray.length; i++) {
+        if (voicearray[i].name === "Microsoft Tolga - Turkish (Turkey)") {
+            utterence.voice = voicearray[i];
+            break;
+        }
+    }
+    synt.speak(utterence);
 });
 function BuyedItem(id,name, price) {
     this.id = id;
@@ -82,22 +95,20 @@ input.addEventListener("keyup", function (event) {
         connection.invoke("SendCurrentAuctionValue", currentmiktar.innerText, auctionid, model.Name, connectionıd).catch(function (err) {
             return console.error(err.toString());
         });
-        var synt = window.speechSynthesis;
-        const voicearray = window.speechSynthesis.getVoices();
-        var line = "deneme";
-        var utterence = new SpeechSynthesisUtterance(line);
-        utterence.pitch = 1;
-        utterence.volume = 1;
-        for (var i = 0; i < voicearray.length; i++) {
-            if (voicearray[i].name === "Microsoft Tolga - Turkish (Turkey)") {
-                utterence.voice = voicearray[i];
-                break;
-            }
-        }
-        synt.speak(utterence);
     }
 });
 function BeginSatış() {
+    var synt = window.speechSynthesis;
+    const voicearray = window.speechSynthesis.getVoices();
+    var utterance = new SpeechSynthesisUtterance();
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    for (var i = 0; i < voicearray; i++) {
+        if (voicearray[i].name === "Microsoft Tolga - Turkish (Turkey)") {
+            utterence.voice = voicearray[i];
+            break;
+        }
+    }
     var timeleft = 4;
     var a = Number(currentmiktar.innerText);
     var timer = setInterval(function () {
@@ -113,11 +124,13 @@ function BeginSatış() {
                 buyedıtems.push(buyedıtem);
             }
             sayım.innerHTML = "<b>Sattım</b>";
+            utterance.text = "Sattım";
+            synt.speak(utterance);
             input.disabled = true;
             if (model.IsModerator && document.getElementById("Ürün").innerText != lastıtem.Name) {
                 nextbutton.className = "";
             }
-            if (document.getElementById("Ürün").innerText == lastıtem.Name && model.IsModerator == false) {
+            if (document.getElementById("Ürün").innerText == lastıtem.Name) {
                 var xhttp = new XMLHttpRequest();
                 var url = "https://localhost:44336/CloseAuction/" + auctionid;
                 xhttp.open("GET", url, false);
@@ -128,12 +141,16 @@ function BeginSatış() {
         } else {
             if (timeleft == 4) {
                 sayım.innerHTML = a.toString() + " e Satıyorum";
+                utterance.text = "Satıyorum";
+                synt.speak(utterance);
             }
             else if (timeleft == 3) {
                 sayım.innerHTML = "";
             }
             else if (timeleft == 2) {
                 sayım.innerHTML = a.toString() + " e Satıyorum";
+                utterance.text = "Satıyorum";
+                synt.speak(utterance);
             }
             else {
                 sayım.innerHTML = "";
